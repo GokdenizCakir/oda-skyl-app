@@ -18,7 +18,9 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
-load_dotenv()
+dotenv_path = 'oda-skyl-app\.env'
+
+load_dotenv(dotenv_path)
 
 
 # If modifying these scopes, delete the file token.json.

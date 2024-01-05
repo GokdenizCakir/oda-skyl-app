@@ -10,10 +10,17 @@ from googleapiclient.errors import HttpError
 from flask import Flask, render_template, jsonify
 from flask_restful import Api, Resource
 from flask_cors import CORS
+from dotenv import load_dotenv
+import json
+
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
+
+dotenv_path = 'oda-skyl-app\.env'
+
+load_dotenv(dotenv_path)
 
 
 # If modifying these scopes, delete the file token.json.
@@ -21,16 +28,23 @@ SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
 def get_credentials():
     creds = None
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    token_json_str = os.getenv("TOKEN_JSON")
+
+    if token_json_str:
+        token_json = json.loads(token_json_str)
+        creds = Credentials.from_authorized_user_info(token_json, SCOPES)
+    
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
             creds = flow.run_local_server(port=0)
-        with open("token.json", "w") as token:
-            token.write(creds.to_json())
+        
+        # Update the token in the .env file
+        with open(".env", "w") as env_file:
+            env_file.write(f'TOKEN_JSON={json.dumps(creds.to_json())}')
+
     return creds
 
 

@@ -1,28 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 export default function Home() {
+  const isInitialRender = useRef(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [ongoingEvents, setOngoingEvents] = useState([]);
   const [roomStatus, setRoomStatus] = useState({
-    isEmpty: true,
+    isEmpty: null,
     eventName: null,
     endTime: null,
   });
   const [nextEvents, setNextEvents] = useState([]);
-  //const [darkMode, setDarkMode] = useState(JSON.parse(localStorage.getItem('darkMode') || 'light'));
-  const [darkMode, setDarkMode] = useState(() => {
-    const storedMode = localStorage.getItem("darkMode");
-    return storedMode ? JSON.parse(storedMode) : null;
-  });
-  useEffect(() => {
-    localStorage.setItem("darkMode", darkMode);
-    document.querySelector("body").style.backgroundColor = darkMode
-      ? "#070332"
-      : "#FFFFFF";
-  }, [darkMode]);
 
   useEffect(() => {
     const fetchOngoingEvents = async () => {
@@ -61,24 +52,34 @@ export default function Home() {
 
     fetchOngoingEvents();
     fetchNextEvents();
+
+    isInitialRender.current = false;
   }, []);
 
   useEffect(() => {
-    if (ongoingEvents.length > 0) {
-      const nextEvent = ongoingEvents[0];
-      setRoomStatus({
-        isEmpty: false,
-        eventName: nextEvent.summary,
-        endTime: nextEvent.end.dateTime,
-      });
-    } else {
-      setRoomStatus({
-        isEmpty: true,
-        eventName: null,
-        endTime: null,
-      });
+    if (!isLoading) {
+      if (ongoingEvents.length > 0) {
+        const nextEvent = ongoingEvents[0];
+        setRoomStatus({
+          isEmpty: false,
+          eventName: nextEvent.summary,
+          endTime: nextEvent.end.dateTime,
+        });
+      } else {
+        setRoomStatus({
+          isEmpty: true,
+          eventName: null,
+          endTime: null,
+        });
+      }
     }
   }, [ongoingEvents]);
+
+  useEffect(() => {
+    if (!isInitialRender.current) {
+      setIsLoading(false);
+    }
+  }, roomStatus);
 
   const isEventOngoing = (event) => {
     const currentDateTime = new Date();
@@ -105,7 +106,7 @@ export default function Home() {
   );
 
   return (
-    <div className={darkMode ? "dark" : null}>
+    <div className="dark">
       <div className="h-screen transition-all relative font-inter flex items-center justify-center bg-white dark:bg-darkBlue">
         <a
           href="http://yildizskylab.com"
@@ -113,39 +114,38 @@ export default function Home() {
         >
           SKY LAB
         </a>
-        <div
-          onClick={() => setDarkMode(!darkMode)}
-          className="p-6 absolute right-6 sm:right-10 lg:right-20 top-7 sm:top-10 cursor-pointer"
-        >
-          <div className="flex w-16 h-8 ring-1 ring-darkBlue dark:ring-white rounded-[1rem] p-[0.2rem]">
-            <div
-              className={`${
-                darkMode ? "translate-x-8" : null
-              } transition-all duration-300 h-full aspect-square rounded-[50%] bg-darkBlue dark:bg-white`}
-            ></div>
-          </div>
-        </div>
 
         <section className="flex flex-col justify-between items-center">
           <div className="flex flex-col items-center justify-center">
-            <div className="bg-white flex justify-between items-center w-60 sm:w-80 aspect-square overflow-hidden rounded-[50%]">
-              <Image
-                src="/happy.svg"
-                alt="Skylab Müthiş"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div>
-            {roomStatus.isEmpty ? (
+            {roomStatus.isEmpty == null && (
+              <>
+                <span class="loader"></span>
+                <h1 className="text-darkBlue dark:text-white mt-6 font-bold text-4xl sm:text-5xl md:text-7xl">
+                  Yükleniyor...
+                </h1>
+              </>
+            )}
+            {roomStatus.isEmpty != null && (
+              <div className="bg-white flex justify-between items-center w-60 sm:w-80 aspect-square overflow-hidden rounded-[50%]">
+                <Image
+                  src={`/${roomStatus.isEmpty ? "happy" : "sad"}.svg`}
+                  alt="Skylab"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </div>
+            )}
+            {roomStatus.isEmpty == true && (
               <h1 className="text-darkBlue dark:text-white mt-6 font-bold text-4xl sm:text-5xl md:text-7xl">
                 Oda şu an boş.
               </h1>
-            ) : (
+            )}
+            {roomStatus.isEmpty == false && (
               <p className="mt-2 md:mt-6 w-80 md:w-96 font-medium text-lg md:text-xl text-center text-darkBlue dark:text-white">
-                Şu anda: {roomStatus.eventName} etkinliği mevcut, En yakın{" "}
-                {new Date(roomStatus.endTime).toLocaleTimeString()}'de
+                Şu anda: {roomStatus.eventName} etkinliği mevcut. En yakın{" "}
+                {new Date(roomStatus.endTime).toLocaleTimeString()} saatinde
                 kullanılabilir.
               </p>
             )}

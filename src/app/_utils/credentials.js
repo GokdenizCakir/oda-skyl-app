@@ -33,9 +33,10 @@ const getInitialToken = async () => {
     access_type: "offline",
     scope: SCOPES,
   });
+
   console.log("Authorize this app by visiting this URL:", authUrl);
 
-  const code = ""; // Enter the authorization code obtained from the user
+  const code = process.env.CODE;
   const { tokens } = await flow.getToken(code);
 
   console.log(

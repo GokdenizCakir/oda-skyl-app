@@ -119,7 +119,7 @@ export default function Home() {
           <div className="flex flex-col items-center justify-center">
             {roomStatus.isEmpty == null && (
               <>
-                <span class="loader"></span>
+                <span className="loader"></span>
                 <h1 className="text-darkBlue dark:text-white mt-6 font-bold text-4xl sm:text-5xl md:text-7xl">
                   Yükleniyor...
                 </h1>

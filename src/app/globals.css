@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  background-color: #070332;
+  background-color: #fff;
 }
 
 .loader {
@@ -13,7 +13,7 @@ body {
   overflow: hidden;
 }
 .loader:before {
-  content: "";
+  content: '';
   width: 70px;
   height: 70px;
   position: absolute;

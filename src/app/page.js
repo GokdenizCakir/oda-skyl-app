@@ -106,11 +106,11 @@ export default function Home() {
   );
 
   return (
-    <div className='dark'>
-      <div className='h-screen transition-all relative font-inter flex items-center justify-center bg-white dark:bg-darkBlue'>
+    <div>
+      <div className='h-screen transition-all relative font-inter flex items-center justify-center bg-white'>
         <a
           href='http://yildizskylab.com'
-          className='absolute p-6 cursor-pointer tracking-[0.25rem] text-xl sm:-rotate-90 left-6 sm:left-2 top-8 sm:top-16 font-bebasNeue text-darkBlue dark:text-white'
+          className='absolute p-6 cursor-pointer tracking-[0.25rem] text-xl sm:-rotate-90 left-6 sm:left-2 top-8 sm:top-16 font-bebasNeue text-darkBlue'
         >
           SKY LAB
         </a>
@@ -120,7 +120,7 @@ export default function Home() {
             {roomStatus.isEmpty == null && (
               <>
                 <span className='loader'></span>
-                <h1 className='text-darkBlue dark:text-white mt-6 font-bold text-4xl sm:text-5xl md:text-7xl'>
+                <h1 className='text-darkBlue mt-6 font-bold text-4xl sm:text-5xl md:text-7xl'>
                   Yükleniyor...
                 </h1>
               </>
@@ -138,12 +138,12 @@ export default function Home() {
               </div>
             )}
             {roomStatus.isEmpty == true && (
-              <h1 className='text-darkBlue dark:text-white mt-6 font-bold text-4xl sm:text-5xl md:text-7xl'>
+              <h1 className='text-darkBlue mt-6 font-bold text-4xl sm:text-5xl md:text-7xl'>
                 Oda şu an boş.
               </h1>
             )}
             {roomStatus.isEmpty == false && (
-              <p className='mt-2 md:mt-6 w-80 md:w-96 font-medium text-lg md:text-xl text-center text-darkBlue dark:text-white'>
+              <p className='mt-2 md:mt-6 w-80 md:w-96 font-medium text-lg md:text-xl text-center text-darkBlue'>
                 Şu anda: {roomStatus.eventName} etkinliği mevcut. En yakın{' '}
                 {new Date(roomStatus.endTime).toLocaleTimeString()} saatinde
                 kullanılabilir.
@@ -155,7 +155,7 @@ export default function Home() {
           href='https://calendar.google.com/calendar/embed?src=bc6edfd480bce7cd796fdc737fb81ea97053ac5d51208e1cff1f04bb46168f1b%40group.calendar.google.com&ctz=Europe%2FIstanbul'
           target='_blank'
           rel='noopener noreferrer'
-          className='absolute bottom-16 sm:bottom-12 py-4 px-20 md:hover:scale-110 transition-transform flex justify-center items-center text-white dark:text-darkBlue bg-darkBlue dark:bg-white'
+          className='absolute bottom-16 sm:bottom-12 py-4 px-20 md:hover:scale-110 transition-transform flex justify-center items-center text-white bg-darkBlue'
         >
           Takvime Git
         </a>

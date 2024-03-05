@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
@@ -127,12 +126,9 @@ export default function Home() {
             )}
             {roomStatus.isEmpty != null && (
               <div className='bg-white flex justify-between items-center w-60 sm:w-80 aspect-square overflow-hidden rounded-[50%]'>
-                <Image
+                <img
                   src={`/${roomStatus.isEmpty ? 'happy' : 'sad'}.svg`}
                   alt='Skylab'
-                  width={0}
-                  height={0}
-                  sizes='100vw'
                   style={{ width: '100%', height: 'auto' }}
                 />
               </div>

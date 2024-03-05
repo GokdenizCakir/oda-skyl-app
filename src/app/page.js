@@ -107,7 +107,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className='h-screen transition-all relative font-inter flex items-center justify-center bg-white'>
+      <div className='h-[100dvh] transition-all relative font-inter flex items-center justify-center bg-white'>
         <a
           href='http://yildizskylab.com'
           className='absolute p-6 cursor-pointer tracking-[0.25rem] text-xl sm:-rotate-90 left-6 sm:left-2 top-8 sm:top-16 font-bebasNeue text-darkBlue'
